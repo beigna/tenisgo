@@ -3,20 +3,22 @@ from django.db import models
 
 
 class Match(models.Model):
-    player_a = models.ForeignKey('players.Player', on_delete=models.CASCADE)
-    player_b = models.ForeignKey('players.Player', on_delete=models.CASCADE)
+    player_a = models.ForeignKey('players.Player',
+                                 related_name='nosense_a',
+                                 on_delete=models.CASCADE)
+    player_b = models.ForeignKey('players.Player',
+                                 related_name='nosense_b',
+                                 on_delete=models.CASCADE)
 
     played_at = models.DateField()
-    winner = models.ForeignKey(
-        'players.Player',
-        on_delete=models.CASCADE,
-        blank=True
-    )
-    loser = models.ForeignKey(
-        'players.Player',
-        on_delete=models.CASCADE,
-        blank=True
-    )
+    winner = models.ForeignKey('players.Player',
+                               related_name='matches_won',
+                               on_delete=models.CASCADE,
+                               blank=True)
+    loser = models.ForeignKey('players.Player',
+                              related_name='matches_lost',
+                              on_delete=models.CASCADE,
+                              blank=True)
 
     def clean(self):
         if self.winner and self.looser:
